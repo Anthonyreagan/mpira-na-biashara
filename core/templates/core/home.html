@@ -1,0 +1,13 @@
+<!-- core/templates/core/home.html -->
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1 class="text-4xl font-extrabold text-gray-800 mb-6">Welcome to Mpira na Biashara!</h1>
+    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+        This is the official website for Mpira na Biashara, your trusted source for information and services related to... (you can expand this later).
+    </p>
+    <p class="text-lg text-gray-700 leading-relaxed">
+        Explore our site to learn more <a href="{% url 'core:about' %}" class="text-blue-600 hover:underline font-semibold">About Us</a>.
+    </p>
+{% endblock content %}
