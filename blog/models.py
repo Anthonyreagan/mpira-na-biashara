@@ -13,6 +13,7 @@ class BlogPost(models.Model):
     author = models.CharField(max_length=100) # Could be a ForeignKey to a User model later
     published_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True) # Automatically updates on each save
+    image = models.ImageField(upload_to='blog_images/', blank=True, null=True) # Images will go into media/blog_images/
     is_published = models.BooleanField(default=False)
 
     class Meta:

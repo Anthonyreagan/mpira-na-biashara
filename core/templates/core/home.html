@@ -1,13 +1,241 @@
-<!-- core/templates/core/home.html -->
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block full_width_content %}
+    <!-- Hero Section - Full Screen Height with Optimized Background -->
+    <section class="relative min-h-screen flex items-center justify-center text-white overflow-hidden pt-[112px]">
+        <!-- Background with optimized image loading -->
+        <div class="absolute inset-0 bg-gray-900">
+            <img src="https://img.freepik.com/premium-photo/happy-african-children-playing-soccer-field_1346134-1706.jpg" 
+                 alt="Children playing soccer"
+                 class="w-full h-full object-cover"
+                 loading="eager"
+                 fetchpriority="high"
+                 decoding="async">
+        </div>
+        
+        <!-- Gradient overlay with animation -->
+        <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-purple-900/60 to-black/80 opacity-100 transition-opacity duration-1000"></div>
+        
+        <!-- Content with staggered animations -->
+        <div class="relative z-10 max-w-4xl mx-auto text-center p-6 space-y-8">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight animate-fade-in-down">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-300">Welcome to Mpira na Biashara</span>
+            </h1>
+            <p class="text-xl md:text-2xl font-light leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-100">
+                Your premier destination for sports insights, business strategies, and community engagement.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-200">
+                <a href="{% url 'services:list' %}" 
+                   class="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-700 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 group">
+                    Explore Our Services
+                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+                <a href="{% url 'blog:list' %}" 
+                   class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white rounded-full text-lg font-semibold shadow-lg hover:bg-white hover:text-purple-700 transform hover:scale-105 transition-all duration-300 group">
+                    Read Our Blog
+                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <svg class="w-8 h-8 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+{% endblock full_width_content %}
 
 {% block content %}
-    <h1 class="text-4xl font-extrabold text-gray-800 mb-6">Welcome to Mpira na Biashara!</h1>
-    <p class="text-lg text-gray-700 leading-relaxed mb-4">
-        This is the official website for Mpira na Biashara, your trusted source for information and services related to... (you can expand this later).
-    </p>
-    <p class="text-lg text-gray-700 leading-relaxed">
-        Explore our site to learn more <a href="{% url 'core:about' %}" class="text-blue-600 hover:underline font-semibold">About Us</a>.
-    </p>
+    <!-- Latest Blog Posts Section -->
+    <section class="py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-sm font-semibold tracking-wider text-blue-600 uppercase">Latest Updates</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-4">From Our Blog</h2>
+                <div class="w-24 h-1 bg-blue-500 mx-auto"></div>
+            </div>
+            
+            {% if latest_posts %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for post in latest_posts %}
+                    <div class="group relative bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                        <div class="relative h-full flex flex-col">
+                            <div class="p-6 flex-grow">
+                                <div class="flex items-center text-sm text-gray-500 mb-3">
+                                    <span>{{ post.published_date|date:"M d, Y" }}</span>
+                                    <span class="mx-2">•</span>
+                                    <span>{{ post.author }}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                                    <a href="{% url 'blog:detail' slug=post.slug %}">{{ post.title }}</a>
+                                </h3>
+                                <p class="text-gray-600 mb-4 line-clamp-3">
+                                    {{ post.content|striptags|truncatewords:25 }}
+                                </p>
+                            </div>
+                            <div class="px-6 pb-6">
+                                <a href="{% url 'blog:detail' slug=post.slug %}" class="inline-flex items-center text-blue-600 font-medium group-hover:text-blue-800 transition-colors duration-300">
+                                    Read more
+                                    <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center mt-12">
+                    <a href="{% url 'blog:list' %}" class="inline-flex items-center px-8 py-4 bg-gray-800 text-white rounded-full text-lg font-medium hover:bg-gray-900 transition-colors duration-300 shadow-lg hover:shadow-xl">
+                        View All Blog Posts
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </a>
+                </div>
+            {% else %}
+                <div class="text-center py-12">
+                    <div class="inline-block p-4 bg-blue-50 rounded-full mb-4">
+                        <svg class="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-800 mb-2">No blog posts yet</h3>
+                    <p class="text-gray-600 max-w-md mx-auto">We're working on some great content. Please check back soon!</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Featured Services Section -->
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-sm font-semibold tracking-wider text-purple-600 uppercase">What We Offer</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-4">Our Featured Services</h2>
+                <div class="w-24 h-1 bg-purple-500 mx-auto"></div>
+            </div>
+            
+            {% if featured_services %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for service in featured_services %}
+                    <div class="group relative bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                        <div class="p-6 h-full flex flex-col">
+                            <div class="flex-grow">
+                                <div class="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white text-purple-600 transition-colors duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-300">
+                                    <a href="{% url 'services:detail' slug=service.slug %}">{{ service.name }}</a>
+                                </h3>
+                                <p class="text-gray-600 mb-4">
+                                    {{ service.short_description }}
+                                </p>
+                            </div>
+                            <a href="{% url 'services:detail' slug=service.slug %}" class="inline-flex items-center text-purple-600 font-medium group-hover:text-purple-800 transition-colors duration-300">
+                                Learn more
+                                <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center mt-12">
+                    <a href="{% url 'services:list' %}" class="inline-flex items-center px-8 py-4 bg-gray-800 text-white rounded-full text-lg font-medium hover:bg-gray-900 transition-colors duration-300 shadow-lg hover:shadow-xl">
+                        View All Services
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </a>
+                </div>
+            {% else %}
+                <div class="text-center py-12">
+                    <div class="inline-block p-4 bg-purple-50 rounded-full mb-4">
+                        <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-800 mb-2">No services available</h3>
+                    <p class="text-gray-600 max-w-md mx-auto">We're currently updating our service offerings. Check back later!</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Contact CTA Section -->
+   <section class="relative py-20 px-4 bg-gradient-to-br from-gray-900 to-black text-white rounded-2xl overflow-hidden relative"
+        <!-- Background image with optimized loading -->
+        <div class="absolute inset-0">
+            <img src="https://st.depositphotos.com/62628780/59905/i/450/depositphotos_599054712-stock-photo-shes-free-talk-business-any.jpg"
+                 alt="Business meeting"
+                 class="w-full h-full object-cover opacity-40"
+                 loading="lazy">
+        </div>
+        
+        <!-- Content with animation -->
+        <div class="relative z-10 max-w-4xl mx-auto text-center p-4 space-y-8">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight animate-fade-in-down">
+                Ready to <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-green-300">Connect</span>?
+            </h2>
+            <p class="text-xl md:text-2xl font-light leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-100">
+                Whether you're looking for sports solutions or business advice, our team is ready to assist you.
+            </p>
+            <div class="animate-fade-in-up delay-200">
+                <a href="{% url 'contact:form' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-900 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 group">
+                    Contact Our Team
+                    <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Animations */
+        @keyframes fade-in-down {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in-up {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in-down {
+            animation: fade-in-down 0.8s ease-out forwards;
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+        
+        /* Line clamp for text truncation */
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 {% endblock content %}

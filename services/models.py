@@ -11,6 +11,7 @@ class Service(models.Model):
     short_description = models.CharField(max_length=500, help_text="A brief summary of the service")
     long_description = models.TextField(blank=True, null=True, help_text="Detailed description of the service")
     is_active = models.BooleanField(default=True, help_text="Whether the service is currently offered")
+    image = models.ImageField(upload_to='service_images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True) # Automatically sets on creation
     updated_at = models.DateTimeField(auto_now=True) # Automatically updates on each save
 

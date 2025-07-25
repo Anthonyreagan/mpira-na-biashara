@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'blog',
     'contact',
     'gallery',
+    'team'
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,26 @@ STATICFILES_DIRS = [
 
 # This is where collectstatic will gather all static files for deployment
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# mpiranabiashara/settings.py
+
+# ... (your existing settings) ...
+
+# Email Settings
+# For development, this backend prints emails to the console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# For production, you'd use something like:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# These settings are for a real SMTP backend, but are still good to define
+# even with the console backend, as you'll switch them later.
+EMAIL_HOST = 'smtp.yourdomain.com'  # e.g., 'smtp.gmail.com' for Gmail
+EMAIL_PORT = 587                    # Common ports: 587 (TLS), 465 (SSL)
+EMAIL_USE_TLS = True                # Use TLS encryption (True for 587)
+EMAIL_HOST_USER = 'your_email@yourdomain.com' # Your email address
+EMAIL_HOST_PASSWORD = 'your_email_password' # Your email password/app password
+DEFAULT_FROM_EMAIL = 'noreply@mpiranabiashara.com' # The email address that appears as the sender
+SERVER_EMAIL = 'webmaster@mpiranabiashara.com' # For error messages
